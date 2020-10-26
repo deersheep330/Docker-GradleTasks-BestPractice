@@ -1,0 +1,15 @@
+services:
+  regression:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sep-regression
+    volumes:
+      - gradle-cache:/home/molly/.gradle
+      - ./archive:/home/molly/app/archive
+    command: SIT Chrome local
+
+volumes:
+  gradle-cache:
+    external:
+      name: gradle-cache
