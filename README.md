@@ -1,4 +1,4 @@
-# SEP-Regression
+# Docker-GradleTasks-Template
 
 docker volume create --name gradle-cache
 
