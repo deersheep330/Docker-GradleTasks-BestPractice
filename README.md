@@ -6,17 +6,6 @@ __A demo project shows how to dockerize a Gradle project and build & run Gradle 
 
 *This demo project is for practice only.*
 
-docker volume create --name gradle-cache
-
-docker build -t browser-test .
-
-docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive -it browser-test SIT Chrome local
-docker run -v gradle-cache:/home/molly/.gradle -it test Stage IE
-
-docker run --rm -i -v gradle-cache:/tmp/myvolume busybox find /tmp/myvolume
-
-docker-compose -f docker-compose.yml -f docker-compose.stage.chrome.yml up --build
-
 ## Contents
 
 - [Run with Gradle](#run-with-gradle)
