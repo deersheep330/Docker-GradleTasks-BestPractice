@@ -1,3 +1,0 @@
-services:
-  regression:
-    command: Stage IE remote
