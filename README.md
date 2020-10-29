@@ -48,7 +48,28 @@ gradle clean build -Pbrowser=IE -Penv=Stage -Pmachine=remote run testGoogle test
 Pass __browser = Chrome__, __env = SIT__, __machine = local__ to Gradle, and run testGoogle, testYahoo tasks, finally copy the test result to archive folder.
 
 ```
-gradle clean build -Pbrowser=Chrome -Penv=SIT -Pmachine=local run testGoogle testYahoo copyTestResults
+docker volume create --name gradle-cache
+docker build -t browser-test .
+docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive -it browser-test SIT Chrome local
+```
+
+- __Scenario II__
+
+Pass __browser = IE__, __env = Stage__, __machine = remote__ to Gradle, and run testGoogle, testYahoo tasks, finally copy the test result to archive folder.
+
+```
+docker volume create --name gradle-cache
+docker build -t browser-test .
+docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive -it browser-test Stage IE remote
 ```
 
 ## Run with docker-compose
+
+- __Scenario I__
+
+Pass __browser = Chrome__, __env = SIT__, __machine = remote__ to Gradle, and run testGoogle, testYahoo tasks, finally copy the test result to archive folder.
+
+```
+docker volume create --name gradle-cache
+docker-compose -f docker-compose.yml -f docker-compose.sit.chrome.yml up --build
+```

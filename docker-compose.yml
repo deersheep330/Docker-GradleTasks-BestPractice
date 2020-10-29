@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sep-regression
+    container_name: browser-test
     volumes:
       - gradle-cache:/home/molly/.gradle
       - ./archive:/home/molly/app/archive
