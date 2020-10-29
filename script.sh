@@ -7,4 +7,4 @@ echo "script.sh get environment: $env"
 echo "script.sh get browser: $browser"
 echo "script.sh get machine: $machine"
 
-sh ./gradlew build -Pbrowser=$browser -Penv=$env -Pmachine=$machine run testBasicDeclarationStatus testBasicCompanyProfile copyTestResults
+sh ./gradlew build -Pbrowser=$browser -Penv=$env -Pmachine=$machine run testGoogle testYahoo copyTestResults

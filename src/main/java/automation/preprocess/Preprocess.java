@@ -13,8 +13,10 @@ public class Preprocess {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         Date date = new Date();
         String env = Utilities.getProperty("environment","env");
+        String browser = Utilities.getProperty("environment", "browser");
+        String machine = Utilities.getProperty("environment", "machine");
 
-        String buildNumber = env + "-" + dateFormat.format(date);
+        String buildNumber = env + "-" + browser + "-" + machine + "-" + dateFormat.format(date);
         Utilities.storeProperty("buildNum", "build", buildNumber);
 
         System.out.println("==> Generate Build Number: " + buildNumber);
