@@ -35,7 +35,7 @@ We'd like to know whether we can dockerize this Gradle project to run the mentio
 
 - __Benefit from Gradle Build Cache__
 
-Otherwise, every Gradle build in the docker container would take long time.
+Otherwise, every Gradle build in the docker container would fetch the dependencies again, and it could take a long time.
   
 - __Archive the test results__
 
@@ -43,21 +43,28 @@ We want to archive the test results on our host machine before the docker contai
 
 ### Gradle Build Cache
 
-docker volume create --name gradle-cache
+To make every docker container share the same Gradle Build Cache, we have to create a docker volume on our own, and mount it on the gradle build cache path of the docker container. e.g.
 
-docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive
+```
+docker volume create --name gradle-cache
+docker run -v gradle-cache:/home/molly/.gradle
+```
 
 ### Archive Test Results
 
-docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive
+To store every test results on our host machine, we just need to bind mount a host machine directory with the docker container. e.g.
+
+```
+docker run -v /C/Code/docker-gradle-template/archive:/home/molly/app/archive
+```
 
 ## Demo
 
 The content below demonstrates 3 different scenarios and shows how to
 
- [run with Gradle](#run-with-gradle)
- [run with docker](#run-with-docker) and
- [run with docker-compose](#run-with-docker-compose).
+- [Run with Gradle](#run-with-gradle)
+- [Run with docker](#run-with-docker)
+- [Run with docker-compose](#run-with-docker-compose)
 
 ### 3 Scenarios
 
@@ -72,12 +79,6 @@ Pass __browser = Chrome__, __env = Stage__, __machine = remote__ to Gradle, and 
 - __Scenario III__
 
 Pass __browser = IE__, __env = SIT__, __machine = local__ to Gradle, and run testGoogle, testYahoo tasks, finally copy the test result to archive folder.
-
-### Run 3 Scenarios with 3 Different Approaches
-
-- [Run with Gradle](#run-with-gradle)
-- [Run with Docker](#run-with-docker)
-- [Run with docker-compose](#run-with-docker-compose)
 
 ### Run with Gradle
 
@@ -100,6 +101,10 @@ gradle clean build -Pbrowser=IE -Penv=SIT -Pmachine=local run testGoogle testYah
 ```
 
 ### Run with Docker
+
+We have to mount a gradle cache volume and bind mount a test results archive volume.
+
+Don't worry about the repeat "docker volume create". If a docker volume trying to be created with an existing name, the existing one would be directly used, no new volume would be created. 
 
 - __Scenario I__
 
@@ -126,6 +131,10 @@ docker run -v gradle-cache:/home/molly/.gradle -v /C/Code/docker-gradle-template
 ```
 
 ### Run with docker-compose
+
+We still have to mount a gradle cache volume and bind mount a test results archive volume.
+
+We can hide the mount syntax in the docker-compose.yml file, but the creating external docker volume command cannot be written in docker-compose.yml file, we still have to execute it explicitly. 
 
 - __Scenario I__
 
